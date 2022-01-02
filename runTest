@@ -1,0 +1,22 @@
+
+#! /bin/bash
+echo "What's the name of the OF-project you'd like to run?"
+read name
+cd /home/henrikg/OpenFOAM/henrikg-8/run/$name
+#cartesianMesh
+#topoSet
+#foamToVTK -cellSet planeCells -latestTime
+decomposePar -force
+mpirun -np 4 pimpleFoam -parallel 
+# > pimpleFoam.log
+reconstructPar
+rm -r /home/henrikg/OpenFOAM/henrikg-8/run/$name/processor*
+#postProcess -func sampleDict
+#postProcess -func sampleTrace3
+#postProcess -func samplePatch
+postProcess -func sampleMeanLine
+#postProcess -func functionInletAverage
+#postProcess -func functionOutletAverage
+postProcess -func zonePlane
+
+
